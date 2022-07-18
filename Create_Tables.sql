@@ -18,7 +18,7 @@ Description :-
 --- Q1) Create a table named 'matches' with appropriate data types for columns
 
 CREATE TABLE matches02
-(
+    (
 	id 			int 		primary key,
 	city 			varchar(50),	
 	date 			date,	
@@ -36,14 +36,14 @@ CREATE TABLE matches02
 	method 			varchar(50),
 	umpire1 		varchar(50),
 	umpire2 		varchar(50)		
-)	
+    )	
 
 
 
 --- Q2) Create a table named 'deliveries' with appropriate data types for columns
 
 Create table deliveries
-( 
+   ( 
 	id 			int,
 	inning 			int,
 	over 			int,
@@ -65,7 +65,7 @@ Create table deliveries
 	constraint fk_matches
 	foreign key(id)
 	references matches(id)	
-)
+   )
 
 
 
