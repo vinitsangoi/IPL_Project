@@ -1,7 +1,7 @@
 --- Title :-        IPL_Database Project
 --- Created by :-   Vinit Sangoi
 --- Date :-         19-07-2022
---- Tool used:- 	PostgreSQL
+--- Tool used:-     PostgreSQL
 
 /*
 Description :- 
@@ -84,10 +84,10 @@ Description :-
 
 	CREATE TABLE deliveries_v02 as 
 	select 	*,
-			CASE WHEN total_runs >= 4 THEN 'boundary'
-			WHEN total_runs = 0 THEN 'dot'
-			ELSE 'other'
-			END as ball_result
+		CASE WHEN total_runs >= 4 THEN 'boundary'
+		     WHEN total_runs = 0 THEN 'dot'
+		     ELSE 'other'
+		     END as ball_result
 	FROM deliveries
 
     --- To view new table
@@ -103,7 +103,7 @@ Description :-
 
  -- Method 1 : Using new created table deliveries_v02
 	SELECT 	  ball_result,
-			  count(*)
+		  count(*)
 	FROM 	  deliveries_v02
 	WHERE 	  ball_result in ('boundary','dot')
 	GROUP BY  ball_result
@@ -113,12 +113,12 @@ Description :-
 	SELECT 	* 
 	FROM  (
 		SELECT
-		case when total_runs>= 4 then 'boundary'
+		    case when total_runs>= 4 then 'boundary'
 			 when total_runs = 0 then 'dot'
 			 else 'other'
 			 end as  ball_result,
-		count(*)
-			FROM deliveries
+		    count(*)
+		FROM deliveries
 		GROUP BY ball_result 
 			  )  AS temp	
 	WHERE 	ball_result IN ('boundary','dot')	
@@ -129,7 +129,7 @@ Description :-
 
  -- Method 1 : Using new created table deliveries_v02
 	SELECT 	  batting_team,
-			  count(ball_result) AS total_boundaries
+		  count(ball_result) AS total_boundaries
 	FROM 	  deliveries_v02
 	WHERE 	  ball_result = 'boundary' 
 	GROUP BY  batting_team
@@ -140,11 +140,11 @@ Description :-
 	SELECT * 
 	FROM  (
 		SELECT 	batting_team,	
-				case when total_runs>= 4 then 'boundary'
-					 when total_runs = 0 then 'dot'
-					 else 'other'
-					 end as  ball_result,
-			    count(*) AS total_boundaries
+			case when total_runs>= 4 then 'boundary'
+			     when total_runs = 0 then 'dot'
+			     else 'other'
+			     end as  ball_result,
+			count(*) AS total_boundaries
 		FROM 	deliveries
 		GROUP BY batting_team,ball_result 
 		ORDER BY total_boundaries desc	
@@ -157,7 +157,7 @@ Description :-
 
  -- Method 1 : Using new created table deliveries_v02
 	SELECT 	  bowling_team,
-			  count(ball_result) as total_dotballs
+		  count(ball_result) as total_dotballs
 	FROM 	  deliveries_v02
 	WHERE 	  ball_result = 'dot'
 	GROUP BY  bowling_team
@@ -168,12 +168,12 @@ Description :-
 	SELECT 	* 
 	FROM  (
 		SELECT  batting_team,	
-				Case when total_runs>= 4 then 'boundary'
-					 when total_runs = 0 then 'dot'
-					 else 'other'
-					 end as  ball_result,
-				count(*) AS total_dotballs
-		FROM deliveries
+			Case when total_runs>= 4 then 'boundary'
+			     when total_runs = 0 then 'dot'
+			     else 'other'
+			     end as  ball_result,
+			count(*) AS total_dotballs
+		FROM    deliveries
 		GROUP BY batting_team,ball_result 
 		ORDER BY total_dotballs desc	
 			   )  AS temp	
@@ -183,7 +183,7 @@ Description :-
 --- Q15) Write a query to fetch the total number of dismissals by dismissal kinds
 
 	SELECT 	  dismissal_kind,
-			  count(dismissal_kind) as count
+		  count(dismissal_kind) as count
 	FROM 	  deliveries
 	WHERE	  dismissal_kind <> 'NA'
 	GROUP BY  dismissal_kind
@@ -194,7 +194,7 @@ Description :-
 --- Q16) Write a query to get the top 5 bowlers who conceded maximum extra runs
 
 	SELECT 	  bowler,
-			  SUM(extra_runs) AS total_extras
+		  sum(extra_runs) AS total_extras
 	FROM 	  deliveries
 	GROUP BY  bowler
 	ORDER BY  total_extras desc
@@ -206,8 +206,8 @@ Description :-
 
 	CREATE TABLE deliveries_v03 AS 
 	Select	a.*,
-		 	b.venue,
-			b.date
+		b.venue,
+		b.date
 	FROM 	deliveries_v02 AS a
 	JOIN 	matches AS b
 	ON 		a.id = b.id
@@ -226,7 +226,7 @@ Description :-
 
  -- Method 1 : Using new created table deliveries_v03
 	SELECT 	  venue,
-			  sum(total_runs) as runs_scored
+	          sum(total_runs) as runs_scored
 	FROM 	  deliveries_v03
 	GROUP BY  venue
 	ORDER BY  runs_scored desc
@@ -234,7 +234,7 @@ Description :-
 
  -- Method 2 : Using the actual table deliveries
 	SELECT 	  m.venue,
-			  sum(d.total_runs) AS runs_scored
+	          sum(d.total_runs) AS runs_scored
 	FROM 	  deliveries AS d
 	JOIN 	  matches AS m
 	ON 		  d.id = m.id
@@ -247,7 +247,7 @@ Description :-
 
  -- Method 1 : Using new created table deliveries_v03
 	SELECT 	  extract( year from date ) AS ipl_year,
-			  sum(total_runs) as runs
+	          sum(total_runs) as runs
 	FROM 	  deliveries_v03
 	WHERE 	  venue = 'Eden Gardens'
 	GROUP BY  ipl_year
@@ -256,7 +256,7 @@ Description :-
 
  -- Method 2 : Using the actual table deliveries
 	SELECT 	  extract( year from m.date) AS ipl_year,
-			  sum(d.total_runs) AS runs
+		  sum(d.total_runs) AS runs
 	FROM 	  deliveries AS d
 	JOIN 	  matches AS m
 	ON 		  d.id = m.id
@@ -281,7 +281,7 @@ Description :-
 --- Q21) Compare the total count of rows and total count of distinct ball_id in deliveries_v04
 
 	SELECT 	count(*)as total_rows,
-			count(distinct ball_id) as distinct_ball_id
+		count(distinct ball_id) as distinct_ball_id
 	FROM 	deliveries_v04	
 
 
@@ -291,7 +291,7 @@ Description :-
  
 	CREATE TABLE deliveries_v05 AS 
 	SELECT 	*, 
-			row_number() over (partition by ball_id) as r_num 
+		row_number() over (partition by ball_id) as r_num 
 	FROM 	deliveries_v04;
 
 
@@ -309,8 +309,8 @@ Description :-
 	SELECT 	  *
 	FROM 	  deliveries_v05
 	WHERE 	  ball_id in ( SELECT ball_id 
-						   FROM deliveries_v05 
-						   WHERE r_num=2 )
+			       FROM deliveries_v05 
+			       WHERE r_num=2 )
 	ORDER BY  ball_id
 
 
